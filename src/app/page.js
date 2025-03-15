@@ -30,9 +30,9 @@ export default function ComingSoon() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen px-6 py-10 text-center">
+    <div className="flex flex-col items-center justify-center min-h-screen px-6 py-18 text-center">
       <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900">
-        Austratax <span className="text-[#ed8936]">Coming Soon</span>
+        AustraTax <span className="text-[#ed8936]">Coming Soon</span>
       </h1>
       <p className="mt-4 text-base sm:text-lg md:text-xl font-semibold text-gray-700 max-w-2xl">
         Empowering You to Master Your Taxes.
