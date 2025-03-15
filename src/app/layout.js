@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "AustraTax",
   description:
-    "AustraTax helps Australian residents and business owners calculate taxes easily. Get accurate tax estimates, deductions, and offsets in a user-friendly way.",
+    "AustraTax helps Australian residents and business owners estimate taxes return easily. Get accurate tax estimates, deductions, and offsets in a user-friendly way.",
   keywords:
     "Australia tax calculator, PAYG tax, ABN tax calculator, GST, superannuation, tax offsets, deductions, income tax, tax refund estimator",
   icons: "/logo2.png",

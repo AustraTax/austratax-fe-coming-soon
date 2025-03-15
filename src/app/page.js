@@ -35,10 +35,10 @@ export default function ComingSoon() {
         AustraTax <span className="text-[#ed8936]">Coming Soon</span>
       </h1>
       <p className="mt-4 text-base sm:text-lg md:text-xl font-semibold text-gray-700 max-w-2xl">
-        Empowering You to Master Your Taxes.
+        Empowering You to Master Your Taxes
       </p>
       <p className="mt-6 text-sm sm:text-base text-gray-600 max-w-lg">
-        We’re launching soon! Stay tuned.
+        We’re launching soon! Stay tuned
       </p>
 
       {/* Countdown Timer */}
