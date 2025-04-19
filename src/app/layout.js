@@ -1,5 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Navbar from "@/components/Navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,16 +19,19 @@ export const metadata = {
   keywords:
     "Australia tax calculator, PAYG tax, ABN tax calculator, GST, superannuation, tax offsets, deductions, income tax, tax refund estimator",
   icons: "/logo2.png",
-  author: "AustraTax",
+  authors: [{ name: "AustraTax", url: "https://austratax.com" }],
+  metadataBase: new URL("https://austratax.com"),
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head />
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
-        {children}
+        <Navbar />
+        <main className="min-h-screen">{children}</main>
       </body>
     </html>
   );
