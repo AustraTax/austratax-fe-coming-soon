@@ -3,40 +3,51 @@
 import { useState } from "react";
 import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
+import { registerUser } from "@/lib/api";
 
 export default function SignupPage() {
-  const [fullName, setFullName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [dob, setDob] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState("");
 
-  const isAgeValid = (dobStr) => {
-    const dobDate = new Date(dobStr);
-    const today = new Date();
-    const minDate = new Date(
-      today.getFullYear() - 14,
-      today.getMonth(),
-      today.getDate()
-    );
-    return dobDate <= minDate;
-  };
-
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
+    setError("");
+    setSuccess("");
+    setLoading(true);
 
-    if (!isAgeValid(dob)) {
-      setError("You must be at least 14 years old to register.");
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      setLoading(false);
       return;
     }
 
-    // TODO: Handle signup logic here
-    console.log("Signup:", { fullName, email, password, dob });
-    setError("");
+    try {
+      const res = await registerUser({
+        firstName,
+        lastName,
+        email,
+        password,
+        confirmPassword,
+      });
+
+      console.log(res.body);
+
+      console.log("✅ Registration successful:", res);
+      setSuccess(res.message || "Successfully registered.");
+    } catch (err) {
+      setError(err.message || "Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleGoogleSignup = () => {
-    // TODO: Handle Google signup
     console.log("Sign up with Google...");
   };
 
@@ -48,17 +59,31 @@ export default function SignupPage() {
         </h1>
 
         <form onSubmit={handleSignup} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Full Name
-            </label>
-            <input
-              type="text"
-              required
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              className="w-full px-4 py-2 border rounded-md"
-            />
+          <div className="flex gap-4">
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                First Name
+              </label>
+              <input
+                type="text"
+                required
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className="w-full px-4 py-2 border rounded-md"
+              />
+            </div>
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Last Name
+              </label>
+              <input
+                type="text"
+                required
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                className="w-full px-4 py-2 border rounded-md"
+              />
+            </div>
           </div>
 
           <div>
@@ -87,13 +112,72 @@ export default function SignupPage() {
             />
           </div>
 
-          {error && <p className="text-sm text-red-600">{error}</p>}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              required
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className={`w-full px-4 py-2 border rounded-md ${
+                confirmPassword && confirmPassword !== password
+                  ? "border-red-500"
+                  : ""
+              }`}
+            />
+            {confirmPassword && confirmPassword !== password && (
+              <p className="text-sm text-red-600 mt-1">
+                Passwords do not match.
+              </p>
+            )}
+          </div>
+
+          {error && (
+            <div className="flex items-center gap-2 text-red-700 bg-red-50 border border-red-200 px-4 py-2 rounded-md text-sm">
+              <svg
+                className="w-4 h-4 flex-shrink-0 text-red-500"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-4h2v2h-2v-2zm0-8h2v6h-2V6z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <span>{error}</span>
+            </div>
+          )}
+
+          {success && (
+            <div className="flex items-center gap-2 text-green-700 bg-green-50 border border-green-200 px-4 py-2 rounded-md text-sm">
+              <svg
+                className="w-4 h-4 flex-shrink-0 text-green-500"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M16.707 5.293a1 1 0 00-1.414 0L9 11.586 6.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l7-7a1 1 0 000-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <span>{success}</span>
+            </div>
+          )}
 
           <button
             type="submit"
-            className="w-full bg-[#ed8936] text-white font-semibold py-2 rounded-md hover:opacity-90 transition"
+            disabled={loading || confirmPassword !== password}
+            className={`w-full font-semibold py-2 rounded-md transition text-white ${
+              loading || confirmPassword !== password
+                ? "bg-[#ed8936]/60 cursor-not-allowed"
+                : "bg-[#ed8936] hover:opacity-90"
+            }`}
           >
-            Sign Up
+            {loading ? "Signing up..." : "Sign Up"}
           </button>
         </form>
 

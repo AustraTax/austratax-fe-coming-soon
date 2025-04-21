@@ -2,20 +2,41 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
+import { loginUser } from "@/lib/api";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // TODO: Add your login logic here
-    console.log("Login:", { email, password });
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      const res = await loginUser({ email, password });
+
+      // Save token for future use (you can use localStorage or cookies)
+      localStorage.setItem("token", res.token);
+      localStorage.setItem("user", JSON.stringify(res.user));
+
+      setSuccess(res.status?.message || "Logged in successfully.");
+      router.push("/"); // Optional: redirect to homepage or dashboard
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleGoogleLogin = () => {
-    // TODO: Integrate Google login
     console.log("Logging in with Google...");
   };
 
@@ -53,11 +74,19 @@ export default function LoginPage() {
             />
           </div>
 
+          {error && <p className="text-sm text-red-600">{error}</p>}
+          {success && <p className="text-sm text-green-600">{success}</p>}
+
           <button
             type="submit"
-            className="w-full bg-[#ed8936] text-white font-semibold py-2 rounded-md hover:opacity-90 transition"
+            disabled={loading}
+            className={`w-full font-semibold py-2 rounded-md text-white transition ${
+              loading
+                ? "bg-[#ed8936]/60 cursor-not-allowed"
+                : "bg-[#ed8936] hover:opacity-90"
+            }`}
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
