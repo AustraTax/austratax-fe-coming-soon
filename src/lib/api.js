@@ -1,5 +1,6 @@
-const BASE_URL = "https://appv1-dd1c5910c109.herokuapp.com/api/v1";
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
+console.log(BASE_URL);
 export async function registerUser({ firstName, lastName, email, password }) {
   const full_name = `${firstName} ${lastName}`;
 
@@ -14,7 +15,7 @@ export async function registerUser({ firstName, lastName, email, password }) {
   });
 
   const data = await response.json();
-
+  console.log(data);
   if (!response.ok || data.status !== "success") {
     const errorMsg =
       data.errors?.join(", ") || data.message || "Registration failed.";

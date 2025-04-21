@@ -1,11 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { registerUser } from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
 
 export default function SignupPage() {
+  const router = useRouter();
+  const { user, authLoading } = useAuth();
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -14,6 +19,10 @@ export default function SignupPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
+
+  useEffect(() => {
+    if (!authLoading && user) router.push("/");
+  }, [user, authLoading, router]);
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -29,27 +38,27 @@ export default function SignupPage() {
 
     try {
       const res = await registerUser({
-        firstName,
-        lastName,
+        full_name: `${firstName} ${lastName}`,
         email,
         password,
-        confirmPassword,
+        password_confirmation: confirmPassword,
       });
 
-      console.log(res.body);
-
-      console.log("✅ Registration successful:", res);
       setSuccess(res.message || "Successfully registered.");
     } catch (err) {
-      setError(err.message || "Something went wrong.");
+      const msg = err?.errors?.[0] || err.message || "Something went wrong.";
+      setError(msg);
     } finally {
       setLoading(false);
     }
   };
 
   const handleGoogleSignup = () => {
-    console.log("Sign up with Google...");
+    window.location.href =
+      "https://appv1-dd1c5910c109.herokuapp.com/users/auth/google_oauth2";
   };
+
+  if (authLoading) return null;
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -137,7 +146,7 @@ export default function SignupPage() {
           {error && (
             <div className="flex items-center gap-2 text-red-700 bg-red-50 border border-red-200 px-4 py-2 rounded-md text-sm">
               <svg
-                className="w-4 h-4 flex-shrink-0 text-red-500"
+                className="w-4 h-4 text-red-500"
                 fill="currentColor"
                 viewBox="0 0 20 20"
               >
@@ -154,7 +163,7 @@ export default function SignupPage() {
           {success && (
             <div className="flex items-center gap-2 text-green-700 bg-green-50 border border-green-200 px-4 py-2 rounded-md text-sm">
               <svg
-                className="w-4 h-4 flex-shrink-0 text-green-500"
+                className="w-4 h-4 text-green-500"
                 fill="currentColor"
                 viewBox="0 0 20 20"
               >

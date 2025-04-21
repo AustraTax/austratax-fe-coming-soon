@@ -1,18 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { loginUser } from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { user, login, loading: authLoading } = useAuth(); // ⬅️ include loading
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // 🚫 Prevent flicker by only redirecting after auth context is loaded
+  useEffect(() => {
+    if (!authLoading && user) {
+      router.push("/");
+    }
+  }, [authLoading, user, router]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -23,22 +32,30 @@ export default function LoginPage() {
     try {
       const res = await loginUser({ email, password });
 
-      // Save token for future use (you can use localStorage or cookies)
-      localStorage.setItem("token", res.token);
-      localStorage.setItem("user", JSON.stringify(res.user));
+      const fallbackName = email.split("@")[0];
+      const userWithName = {
+        ...res.user,
+        full_name: res.user.full_name || fallbackName,
+      };
+
+      login(userWithName, res.token); // ✅ set context
 
       setSuccess(res.status?.message || "Logged in successfully.");
-      router.push("/"); // Optional: redirect to homepage or dashboard
+      router.push("/");
     } catch (err) {
-      setError(err.message);
+      setError(err.message || "Login failed.");
     } finally {
       setLoading(false);
     }
   };
 
   const handleGoogleLogin = () => {
-    console.log("Logging in with Google...");
+    window.location.href =
+      "https://appv1-dd1c5910c109.herokuapp.com/users/auth/google_oauth2";
   };
+
+  // 🛑 Don't render page until AuthContext is ready
+  if (authLoading) return null;
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -74,8 +91,39 @@ export default function LoginPage() {
             />
           </div>
 
-          {error && <p className="text-sm text-red-600">{error}</p>}
-          {success && <p className="text-sm text-green-600">{success}</p>}
+          {error && (
+            <div className="flex items-center gap-2 text-red-700 bg-red-50 border border-red-200 px-4 py-2 rounded-md text-sm">
+              <svg
+                className="w-4 h-4 flex-shrink-0 text-red-500"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-4h2v2h-2v-2zm0-8h2v6h-2V6z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <span>{error}</span>
+            </div>
+          )}
+
+          {success && (
+            <div className="flex items-center gap-2 text-green-700 bg-green-50 border border-green-200 px-4 py-2 rounded-md text-sm">
+              <svg
+                className="w-4 h-4 flex-shrink-0 text-green-500"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M16.707 5.293a1 1 0 00-1.414 0L9 11.586 6.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l7-7a1 1 0 000-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <span>{success}</span>
+            </div>
+          )}
 
           <button
             type="submit"
