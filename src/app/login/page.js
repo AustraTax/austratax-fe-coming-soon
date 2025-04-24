@@ -2,24 +2,43 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
-import { loginUser } from "@/lib/api";
+import { loginUser, loginWithToken } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { user, login, loading: authLoading } = useAuth(); // ⬅️ include loading
+  const searchParams = useSearchParams();
+  const { user, login, loading: authLoading } = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // 🚫 Prevent flicker by only redirecting after auth context is loaded
+  // ✅ Auto-login with token from Google OAuth redirect
+  useEffect(() => {
+    const token = searchParams.get("token");
+
+    if (token && !user) {
+      loginWithToken(token)
+        .then(({ user, token }) => {
+          login(user, token); // ⬅️ save in AuthContext
+          router.replace("/tax-calculator");
+          router.refresh(); // ⬅️ force navbar/layout update
+        })
+        .catch((err) => {
+          setError(err.message || "Google login failed.");
+        });
+    }
+  }, [searchParams, user, login, router]);
+
+  // ✅ Redirect if already logged in
   useEffect(() => {
     if (!authLoading && user) {
-      router.push("/");
+      router.push("/tax-calculator");
     }
   }, [authLoading, user, router]);
 
@@ -32,16 +51,10 @@ export default function LoginPage() {
     try {
       const res = await loginUser({ email, password });
 
-      const fallbackName = email.split("@")[0];
-      const userWithName = {
-        ...res.user,
-        full_name: res.user.full_name || fallbackName,
-      };
-
-      login(userWithName, res.token); // ✅ set context
-
+      login(res.user, res.token);
       setSuccess(res.status?.message || "Logged in successfully.");
-      router.push("/");
+      router.replace("/tax-calculator");
+      router.refresh();
     } catch (err) {
       setError(err.message || "Login failed.");
     } finally {
@@ -50,11 +63,16 @@ export default function LoginPage() {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href =
-      "https://appv1-dd1c5910c109.herokuapp.com/users/auth/google_oauth2";
+    const googleUrl = process.env.NEXT_PUBLIC_GOOGLE_AUTH_URL;
+    if (googleUrl) {
+      window.location.href = googleUrl;
+    } else {
+      setError("Google login is not configured.");
+    }
   };
 
-  // 🛑 Don't render page until AuthContext is ready
+  const isFormValid = email.trim() && password.trim() && !loading;
+
   if (authLoading) return null;
 
   return (
@@ -91,10 +109,11 @@ export default function LoginPage() {
             />
           </div>
 
+          {/* ✅ Error message */}
           {error && (
             <div className="flex items-center gap-2 text-red-700 bg-red-50 border border-red-200 px-4 py-2 rounded-md text-sm">
               <svg
-                className="w-4 h-4 flex-shrink-0 text-red-500"
+                className="w-4 h-4 text-red-500"
                 fill="currentColor"
                 viewBox="0 0 20 20"
               >
@@ -108,10 +127,11 @@ export default function LoginPage() {
             </div>
           )}
 
+          {/* ✅ Success message */}
           {success && (
             <div className="flex items-center gap-2 text-green-700 bg-green-50 border border-green-200 px-4 py-2 rounded-md text-sm">
               <svg
-                className="w-4 h-4 flex-shrink-0 text-green-500"
+                className="w-4 h-4 text-green-500"
                 fill="currentColor"
                 viewBox="0 0 20 20"
               >
@@ -127,9 +147,9 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={!isFormValid}
             className={`w-full font-semibold py-2 rounded-md text-white transition ${
-              loading
+              !isFormValid
                 ? "bg-[#ed8936]/60 cursor-not-allowed"
                 : "bg-[#ed8936] hover:opacity-90"
             }`}

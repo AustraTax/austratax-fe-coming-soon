@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
 import { registerUser } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
@@ -15,14 +15,14 @@ export default function SignupPage() {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [confirmPassword, setconfirmPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!authLoading && user) router.push("/");
-  }, [user, authLoading, router]);
+  }, [authLoading, user, router]);
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -30,33 +30,40 @@ export default function SignupPage() {
     setSuccess("");
     setLoading(true);
 
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
-      setLoading(false);
-      return;
-    }
-
     try {
       const res = await registerUser({
-        full_name: `${firstName} ${lastName}`,
+        firstName,
+        lastName,
         email,
         password,
-        password_confirmation: confirmPassword,
+        confirmPassword,
       });
 
-      setSuccess(res.message || "Successfully registered.");
+      router.push(`/confirm?email=${encodeURIComponent(email)}`);
     } catch (err) {
-      const msg = err?.errors?.[0] || err.message || "Something went wrong.";
-      setError(msg);
+      setError(err.message || "Something went wrong.");
     } finally {
       setLoading(false);
     }
   };
 
   const handleGoogleSignup = () => {
-    window.location.href =
-      "https://appv1-dd1c5910c109.herokuapp.com/users/auth/google_oauth2";
+    const googleUrl = process.env.NEXT_PUBLIC_GOOGLE_AUTH_URL;
+    if (!googleUrl) {
+      alert("Google login URL not configured.");
+      return;
+    }
+    window.location.href = googleUrl;
   };
+
+  const isFormValid =
+    firstName.trim() &&
+    lastName.trim() &&
+    email.trim() &&
+    password &&
+    confirmPassword &&
+    password === confirmPassword &&
+    !loading;
 
   if (authLoading) return null;
 
@@ -129,7 +136,7 @@ export default function SignupPage() {
               type="password"
               required
               value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              onChange={(e) => setconfirmPassword(e.target.value)}
               className={`w-full px-4 py-2 border rounded-md ${
                 confirmPassword && confirmPassword !== password
                   ? "border-red-500"
@@ -145,48 +152,25 @@ export default function SignupPage() {
 
           {error && (
             <div className="flex items-center gap-2 text-red-700 bg-red-50 border border-red-200 px-4 py-2 rounded-md text-sm">
-              <svg
-                className="w-4 h-4 text-red-500"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-4h2v2h-2v-2zm0-8h2v6h-2V6z"
-                  clipRule="evenodd"
-                />
-              </svg>
               <span>{error}</span>
             </div>
           )}
-
           {success && (
             <div className="flex items-center gap-2 text-green-700 bg-green-50 border border-green-200 px-4 py-2 rounded-md text-sm">
-              <svg
-                className="w-4 h-4 text-green-500"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M16.707 5.293a1 1 0 00-1.414 0L9 11.586 6.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l7-7a1 1 0 000-1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
               <span>{success}</span>
             </div>
           )}
 
           <button
             type="submit"
-            disabled={loading || confirmPassword !== password}
+            disabled={!isFormValid}
             className={`w-full font-semibold py-2 rounded-md transition text-white ${
-              loading || confirmPassword !== password
+              !isFormValid
                 ? "bg-[#ed8936]/60 cursor-not-allowed"
                 : "bg-[#ed8936] hover:opacity-90"
             }`}
           >
-            {loading ? "Signing up..." : "Sign Up"}
+            {loading ? "Signing up…" : "Sign Up"}
           </button>
         </form>
 

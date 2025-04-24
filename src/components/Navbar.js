@@ -4,14 +4,16 @@ import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const { user, logout, loading } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const router = useRouter();
 
-  // Close dropdown on outside click
+  // ✅ Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -22,6 +24,19 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // ✅ Close dropdown on login/logout
+  useEffect(() => {
+    setDropdownOpen(false);
+  }, [user]);
+
+  // ✅ Logout logic
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    logout();
+    router.refresh();
+    router.push("/login");
+  };
+
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "/tax-calculator", label: "Tax Calculator" },
@@ -29,17 +44,22 @@ export default function Navbar() {
     { href: "/contact", label: "Contact" },
   ];
 
-  const getInitials = (name = "") => {
-    const parts = name.trim().split(" ");
-    return parts
-      .map((p) => p[0])
-      .join("")
-      .slice(0, 2)
-      .toUpperCase();
+  const getInitials = () => {
+    if (user?.firstName || user?.lastName) {
+      return (
+        (user.firstName?.[0] || "") + (user.lastName?.[0] || "")
+      ).toUpperCase();
+    }
+    return user?.email?.[0]?.toUpperCase() || "U";
   };
 
-  const truncateName = (name = "") =>
-    name.length > 10 ? `${name.slice(0, 10)}…` : name;
+  const getDisplayName = () => {
+    if (user?.firstName) {
+      const name = `${user.firstName} ${user.lastName || ""}`.trim();
+      return name.length > 12 ? name.slice(0, 10) + "…" : name;
+    }
+    return user?.email?.split("@")[0] || "User";
+  };
 
   return (
     <header className="w-full bg-white border-b border-gray-200 top-0 z-50">
@@ -70,12 +90,10 @@ export default function Navbar() {
                   className="flex items-center gap-2"
                 >
                   <div className="w-8 h-8 rounded-full bg-[#ed8936] text-white flex items-center justify-center font-bold text-sm uppercase">
-                    {getInitials(user.full_name || user.email.split("@")[0])}
+                    {getInitials()}
                   </div>
                   <span className="text-sm font-medium text-gray-700 max-w-[100px] truncate capitalize">
-                    {truncateName(
-                      user.full_name?.split(" ")[0] || user.email.split("@")[0]
-                    )}
+                    {getDisplayName()}
                   </span>
                 </button>
 
@@ -88,7 +106,7 @@ export default function Navbar() {
                       Profile
                     </Link>
                     <button
-                      onClick={logout}
+                      onClick={handleLogout}
                       className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
                       Logout
@@ -153,7 +171,7 @@ export default function Navbar() {
                 </Link>
                 <button
                   onClick={() => {
-                    logout();
+                    handleLogout();
                     setMobileOpen(false);
                   }}
                   className="text-sm font-medium text-gray-700 hover:text-[#ed8936] transition text-left"

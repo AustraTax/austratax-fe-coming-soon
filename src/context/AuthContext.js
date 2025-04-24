@@ -1,4 +1,3 @@
-// context/AuthContext.js
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
@@ -8,7 +7,7 @@ const AuthContext = createContext();
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
-  const [loading, setLoading] = useState(true); // 👈 NEW
+  const [loading, setLoading] = useState(true); // ✅ hydration guard
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -19,7 +18,7 @@ export function AuthProvider({ children }) {
       setToken(storedToken);
     }
 
-    setLoading(false); // ✅ auth status now known
+    setLoading(false); // ✅ mark ready
   }, []);
 
   const login = (userData, token) => {
@@ -30,6 +29,7 @@ export function AuthProvider({ children }) {
   };
 
   const logout = () => {
+    console.log("🔒 Logging out");
     localStorage.removeItem("user");
     localStorage.removeItem("token");
     setUser(null);
