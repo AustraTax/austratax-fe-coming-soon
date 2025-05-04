@@ -9,7 +9,7 @@ export default function Navbar() {
 
   const navLinks = [
     { href: "/", label: "Home" },
-    { href: "/one-page-tax-calculation", label: "Tax Calculator" },
+    { href: "/australian-tax-returns-calculator", label: "Tax Calculator" },
     { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" },
   ];
