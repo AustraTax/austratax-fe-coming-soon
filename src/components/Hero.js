@@ -63,7 +63,7 @@ export default function Hero() {
             all in one place.
           </p>
           <Link
-            href="/tax-calculator"
+            href="/one-page-tax-calculation"
             className="inline-block bg-[#ed8936] text-white text-base font-semibold px-8 py-3 rounded-lg hover:scale-105 hover:opacity-90 transition-all"
           >
             Calculate Your Tax
