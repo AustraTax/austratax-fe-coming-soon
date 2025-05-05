@@ -1,70 +1,64 @@
-"use client";
-import React from "react";
+'use client';
+import React from 'react';
+import taxConfig from '../app/data/taxConfig.json';
 
-export default function SummaryPanel({ data }) {
+export default function SummaryPanel({ data, state }) {
   const {
-    tax,
-    taxableBefore,
-    netIncome,
-    lito,
-    helpRepayment,
-    medicareLevy,
-    medicareSurcharge,
-    marginalRate,
-    refundMessage,
+    gross, totalDeductions, taxableBefore, netIncome,
+    zoneD, vehD, remoteD,
+    bracketTax, totalTax, lito, help, medicare, surcharge,
+    marginalRate, refundMessage
   } = data;
 
+  const {
+    clientName, year, isResident, visaStatus,
+    helpFlag, medicareExemptFlag,
+    privateHealthFlag, hasDependants, numDependants,
+    income
+  } = state;
+
+  if (!income || parseFloat(income) <= 0) return null;
+
+  const FY      = year==='this'?'2024-25':'2023-24';
+  const visaRec = taxConfig.visaOptions.find(v=>v.key===visaStatus);
+  const cat     = isResident==='yes'?'resident':visaRec?.residency||'nonResident';
+
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 col-span-2">
-      <div className="bg-[#ed8936] text-white p-6 rounded-t-2xl">
-        <p className="text-sm">Estimated Tax Payable</p>
-        <p className="text-4xl font-bold mt-2">${tax.toFixed(0)}</p>
+    <div className="col-span-2 print:p-8">
+      <div className="sticky top-8 bg-white rounded shadow overflow-hidden">
+        <div className="bg-orange-500 text-white p-6">
+          <p className="text-lg">Summary for <strong>{clientName||'—'}</strong></p>
+          <p className="mt-2">Financial Year: <strong>{FY}</strong></p>
+          <p className="mt-2">
+            Resident? <strong>{isResident==='yes'?'Yes':'No'}</strong>
+            {cat!=='resident'&&visaRec&&` (${visaRec.label})`}
+          </p>
+          <p className="mt-4 text-2xl">Estimated Tax: <strong>${totalTax.toFixed(2)}</strong></p>
+        </div>
+        <div className="p-6 space-y-2 bg-white">
+          <div className="flex justify-between"><span>Gross Income:</span><span>${gross.toFixed(2)}</span></div>
+          <div className="flex justify-between"><span>Total Deductions:</span><span>–${totalDeductions.toFixed(2)}</span></div>
+          <div className="flex justify-between"><span> • Zone Offset:</span><span>–${zoneD.toFixed(2)}</span></div>
+          <div className="flex justify-between"><span> • Vehicle Claim:</span><span>–${vehD.toFixed(2)}</span></div>
+          <div className="flex justify-between"><span> • Remote Housing:</span><span>–${remoteD.toFixed(2)}</span></div>
+          <div className="border-t my-2"/>
+          <div className="flex justify-between"><span>Taxable Income:</span><span>${taxableBefore.toFixed(2)}</span></div>
+          <div className="flex justify-between"><span>Income Tax Payable:</span><span>${bracketTax.toFixed(2)}</span></div>
+          {lito>0 && <div className="flex justify-between"><span>LITO Offset:</span><span>–${lito.toFixed(2)}</span></div>}
+          {helpFlag==='yes'&&<div className="flex justify-between"><span>HELP Repayment:</span><span>${help.toFixed(2)}</span></div>}
+          <div className="flex justify-between"><span>Medicare Levy{medicareExemptFlag==='yes'?' (exempt)':''}:</span><span>${medicare.toFixed(2)}</span></div>
+          <div className="flex justify-between"><span>Private Health Surcharge:</span><span>${surcharge.toFixed(2)}</span></div>
+          {hasDependants==='yes'&&<div className="flex justify-between"><span>Dependants:</span><span>{numDependants}</span></div>}
+          <div className="border-t my-2"/>
+          <div className="flex justify-between font-bold"><span>Net Income:</span><span>${netIncome.toFixed(2)}</span></div>
+          <div className="flex justify-between font-bold"><span>Marginal Rate:</span><span>{marginalRate}%</span></div>
+          <div className="mt-2 font-semibold">{refundMessage}</div>
+
+          <div className="mt-6 flex justify-end print:hidden">
+            <button onClick={()=>window.print()} className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Print PDF</button>
+          </div>
+        </div>
       </div>
-
-      <div className="p-6 space-y-3 text-sm text-gray-800">
-        <SummaryItem label="Taxable Income" value={taxableBefore} />
-        <SummaryItem label="Income Tax Payable" value={tax} />
-        <SummaryItem label="Medicare Levy" value={medicareLevy} />
-
-        {medicareSurcharge > 0 && (
-          <SummaryItem label="Medicare Surcharge" value={medicareSurcharge} />
-        )}
-
-        <SummaryItem label="LITO Offset" value={lito} prefix="-" />
-
-        {helpRepayment > 0 && (
-          <SummaryItem label="HELP Repayment" value={helpRepayment} />
-        )}
-
-        <hr className="my-2 border-gray-300" />
-
-        <SummaryItem label="Net Income" value={netIncome} bold />
-        {/* <SummaryItem
-          label="Marginal Tax Rate"
-          value={`${marginalRate}%`}
-          bold
-        /> */}
-
-        <div className="mt-4 font-semibold text-sm">{refundMessage}</div>
-
-        <button
-          onClick={() => window.print()}
-          className="mt-6 w-full py-2 bg-gray-100 hover:bg-gray-200 text-sm font-medium rounded-md transition"
-        >
-          Print as PDF
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function SummaryItem({ label, value, bold = false, prefix = "" }) {
-  return (
-    <div className="flex justify-between">
-      <span className={bold ? "font-semibold" : ""}>{label}</span>
-      <span className={bold ? "font-semibold" : ""}>
-        {typeof value === "number" ? `${prefix}$${value.toFixed(2)}` : value}
-      </span>
     </div>
   );
 }

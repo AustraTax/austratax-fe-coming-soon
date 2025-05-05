@@ -1,18 +1,18 @@
-"use client";
-import React from "react";
+'use client';
+import React from 'react';
 
-export default function NumberInput({ label, value, onChange, ...rest }) {
+export default function NumberInput({ label, value, onChange, min, max, step }) {
   return (
-    <div className="space-y-1">
-      <label className="block text-sm font-semibold text-gray-700">
-        {label}
-      </label>
+    <div>
+      {label && <label className="block font-medium mb-1">{label}</label>}
       <input
         type="number"
+        className="w-full p-2 border rounded"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full p-2 border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-orange-400 transition"
-        {...rest}
+        onChange={e=>onChange(e.target.value)}
+        min={min}
+        max={max}
+        step={step}
       />
     </div>
   );
