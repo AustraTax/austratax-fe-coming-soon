@@ -4,13 +4,11 @@ import React from "react";
 export default function Terms() {
   return (
     <main className="bg-white py-10 px-6 md:px-10 max-w-4xl mx-auto text-gray-800">
-      <h1 className="text-3xl font-bold mb-6 text-[#ed8936]">
+      <h1 className="text-4xl font-bold mb-8 text-[#ed8936] text-center">
         Terms and Conditions of Use
       </h1>
 
-      <p className="text-sm text-gray-500 mb-2">
-        Effective Date: [Insert Date]
-      </p>
+      <p className="text-sm text-gray-500 mb-2">Effective Date: 05-05-2025</p>
 
       <p className="text-sm text-gray-500 mb-10">
         Website:{" "}
@@ -172,13 +170,12 @@ export default function Terms() {
           <p>
             Email:{" "}
             <a
-              href="mailto:support@austratax.com.au"
+              href="mailto:contact@austratax.com.au"
               className="text-[#ed8936] underline"
             >
-              support@austratax.com.au
+              contact@austratax.com.au
             </a>
           </p>
-          <p>Mail: [Insert Postal Address]</p>
         </div>
       </Section>
     </main>

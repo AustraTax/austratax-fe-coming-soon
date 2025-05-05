@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import TaxForm from "../../components/TaxForm";
 import SummaryPanel from "../../components/SummaryPanel";
 import { calculateHelpRepayment } from "../../lib/taxUtils";
+import Disclaimer from "@/components/Disclaimer";
 
 export default function SimplePage() {
   const [state, setState] = useState({
@@ -151,6 +152,8 @@ export default function SimplePage() {
 
   return (
     <main className="min-h-screen bg-gray-50 py-10 px-4">
+      <Disclaimer />
+
       <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Left: Tax Form */}
         <div className="md:col-span-2">

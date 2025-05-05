@@ -18,8 +18,14 @@ export default function Navbar() {
     <header className="w-full bg-white border-b border-gray-200 top-0 z-50">
       <div className="max-w-5xl mx-auto flex justify-between items-center px-4 py-4">
         {/* Logo */}
-        <Link href="/" className="text-xl font-bold text-[#ed8936]">
+        <Link
+          href="/"
+          className="flex items-baseline gap-1 text-xl font-bold text-[#ed8936]"
+        >
           AustraTax
+          <span className="text-[8px] font-normal text-gray-400 uppercase tracking-wider">
+            beta
+          </span>
         </Link>
 
         {/* Desktop Navigation */}

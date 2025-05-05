@@ -4,7 +4,9 @@ import React from "react";
 export default function PrivacyPolicy() {
   return (
     <main className="bg-white py-10 px-6 md:px-10 max-w-4xl mx-auto text-gray-800">
-      <h1 className="text-3xl font-bold mb-6 text-[#ed8936]">Privacy Policy</h1>
+      <h1 className="text-4xl font-bold mb-8 text-[#ed8936] text-center">
+        Privacy Policy
+      </h1>
 
       <p className="text-sm text-gray-500 mb-2">Effective Date: 05-05-2025</p>
       {/* <p className="text-sm text-gray-500 mb-6">
@@ -159,13 +161,13 @@ export default function PrivacyPolicy() {
           <p>
             Email:{" "}
             <a
-              href="mailto:privacy@austratax.com.au"
+              href="mailto:contact@austratax.com.au"
               className="text-[#ed8936] underline"
             >
-              privacy@austratax.com.au
+              contact@austratax.com.au
             </a>
           </p>
-          <p>Mail: AustraTax Pty Ltd, [Insert Postal Address]</p>
+
           <p>
             Office of the Australian Information Commissioner (OAIC):{" "}
             <a

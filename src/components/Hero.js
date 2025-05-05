@@ -4,8 +4,7 @@ export default function Hero() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative w-full bg-white min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Background Circular SVG Grid with Blended Edges */}
+      {/* <section className="relative w-full bg-white min-h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 flex items-center justify-center z-0 pointer-events-none">
           <div className="w-[90vw] max-w-4xl aspect-square rounded-full overflow-hidden relative opacity-20">
             <svg
@@ -14,13 +13,11 @@ export default function Hero() {
               preserveAspectRatio="none"
             >
               <defs>
-                {/* Fading circular mask */}
                 <radialGradient id="fadeMask" cx="50%" cy="50%" r="50%">
                   <stop offset="60%" stopColor="white" stopOpacity="1" />
                   <stop offset="100%" stopColor="white" stopOpacity="0" />
                 </radialGradient>
 
-                {/* Grid pattern */}
                 <pattern
                   id="grid"
                   width="40"
@@ -35,13 +32,11 @@ export default function Hero() {
                   />
                 </pattern>
 
-                {/* Mask that uses the fade gradient */}
                 <mask id="fadeMaskUse">
                   <rect width="100%" height="100%" fill="url(#fadeMask)" />
                 </mask>
               </defs>
 
-              {/* Grid with fading edges */}
               <rect
                 width="100%"
                 height="100%"
@@ -52,7 +47,6 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Main Content */}
         <div className="relative max-w-4xl mx-auto px-4 text-center z-10">
           <h1 className="text-5xl sm:text-6xl font-extrabold tracking-tight text-[#ed8936] mb-6 leading-tight font-[serif]">
             Understand & Maximise Your Tax Return
@@ -69,31 +63,39 @@ export default function Hero() {
             Calculate Your Tax
           </Link>
         </div>
-      </section>
+      </section> */}
 
       {/* Mission Section */}
-      <section className="w-full min-h-screen bg-gray-50 flex items-center">
-        <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-          {/* Left: Text Content */}
+      <section className="w-full min-h-screen bg-gray-50 flex items-center py-16">
+        <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          {/* Text Content */}
           <div>
-            <p className="uppercase text-sm tracking-widest text-[#ed8936] font-semibold mb-4">
-              Our Mission
-            </p>
-
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6 leading-snug">
               Making Tax Simpler, Smarter, and Stress-Free
             </h2>
 
-            <p className="text-gray-700 text-lg leading-relaxed">
+            <p className="text-gray-700 text-lg leading-relaxed mb-4">
               At AustraTax, our mission is to make tax calculations accessible
               and easy for everyone — whether you're a salaried employee or a
               business owner with an ABN. We’re committed to helping Australians
               understand their tax position, claim all eligible deductions, and
               estimate refunds without needing a professional.
             </p>
+
+            <p className="text-gray-700 text-lg leading-relaxed mb-6">
+              Instantly estimate your taxes, deductions, and refunds — all in
+              one place.
+            </p>
+
+            <Link
+              href="/australian-tax-returns-calculator"
+              className="inline-block bg-[#ed8936] text-white text-base font-semibold px-8 py-3 rounded-lg hover:scale-105 hover:opacity-90 transition-all"
+            >
+              Calculate Your Tax Return Now
+            </Link>
           </div>
 
-          {/* Right: Image */}
+          {/* Image */}
           <div className="w-full">
             <img
               src="/taximage.png"

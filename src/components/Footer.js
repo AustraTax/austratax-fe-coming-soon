@@ -5,11 +5,17 @@ export default function Footer() {
     <footer className="w-full border-t border-gray-200 bg-white ">
       <div className="max-w-5xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-start md:items-center text-sm text-gray-600 gap-2">
         {/* Left: Brand */}
-        <div className="text-center text-xs text-gray-400 ">
-          <Link href="/" className="text-base font-semibold text-[#ed8936]">
+        <div className="text-center text-xs text-gray-400">
+          <Link
+            href="/"
+            className="inline-flex items-baseline gap-1 text-base font-semibold text-[#ed8936]"
+          >
             <span className="hover:underline">AustraTax</span>
+            <span className="text-[8px] font-normal text-gray-400 uppercase tracking-wider">
+              beta
+            </span>
           </Link>{" "}
-          &copy; {new Date().getFullYear()} Austratax. All rights reserved.
+          &copy; {new Date().getFullYear()} AustraTax. All rights reserved.
         </div>
 
         {/* Right: Horizontal Links */}
