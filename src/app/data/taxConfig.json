@@ -1,0 +1,82 @@
+{
+    "visaOptions": [
+      { "key":"citizen",     "label":"Australian Citizen",             "residency":"resident",       "medicareExempt":false },
+      { "key":"permanent",   "label":"Permanent Resident",             "residency":"resident",       "medicareExempt":false },
+      { "key":"subclass417", "label":"Working Holiday (subclass 417)",  "residency":"workingHoliday","medicareExempt":true  },
+      { "key":"subclass462", "label":"Work & Holiday (subclass 462)",   "residency":"workingHoliday","medicareExempt":true  },
+      { "key":"subclass485", "label":"Graduate (subclass 485)",         "residency":"resident",       "medicareExempt":true  },
+      { "key":"student",     "label":"Student (subclass 500)",         "residency":"resident",       "medicareExempt":true  },
+      { "key":"subclass482", "label":"Temporary Skill (subclass 482)",  "residency":"resident",       "medicareExempt":false },
+      { "key":"visitor600",  "label":"Visitor (subclass 600)",         "residency":"nonResident",    "medicareExempt":true  },
+      { "key":"other",       "label":"Other Temporary Visa",           "residency":"resident",       "medicareExempt":true  }
+    ],
+  
+    "2024-25": {
+      "resident": {
+        "brackets":[
+          { "min":0,      "max":18200,  "rate":0.00 },
+          { "min":18200,  "max":45000,  "rate":0.16 },
+          { "min":45000,  "max":135000, "rate":0.30 },
+          { "min":135000, "max":190000, "rate":0.37 },
+          { "min":190000, "max":null,   "rate":0.45 }
+        ],
+        "lito": { "maxOffset":325,   "phaseOutStart":45000,   "phaseOutEnd":66667,    "rate":0.015 }
+      },
+      "nonResident": {
+        "brackets":[
+          { "min":0,      "max":135000, "rate":0.30 },
+          { "min":135000, "max":190000, "rate":0.37 },
+          { "min":190000, "max":null,   "rate":0.45 }
+        ]
+      },
+      "workingHoliday": {
+        "brackets":[
+          { "min":0,      "max":45000,  "rate":0.15 },
+          { "min":45000,  "max":135000, "rate":0.30 },
+          { "min":135000, "max":190000, "rate":0.37 },
+          { "min":190000, "max":null,   "rate":0.45 }
+        ]
+      },
+      "medicare": {
+        "threshold":26000,
+        "phaseInEnd":32500,
+        "rate":0.02,
+        "phaseInRate":0.10
+      }
+    },
+  
+    "2023-24": {
+      "resident": {
+        "brackets":[
+          { "min":0,      "max":18200,  "rate":0.00 },
+          { "min":18200,  "max":45000,  "rate":0.19 },
+          { "min":45000,  "max":120000, "rate":0.325 },
+          { "min":120000, "max":180000, "rate":0.37 },
+          { "min":180000, "max":null,   "rate":0.45 }
+        ],
+        "lito": { "maxOffset":700, "phaseOutStart":37500, "phaseOutEnd":66667, "rate":0.05 }
+      },
+      "nonResident": {
+        "brackets":[
+          { "min":0,      "max":120000, "rate":0.325 },
+          { "min":120000, "max":180000, "rate":0.37 },
+          { "min":180000, "max":null,   "rate":0.45 }
+        ]
+      },
+      "workingHoliday": {
+        "brackets":[
+          { "min":0,      "max":45000,  "rate":0.15 },
+          { "min":45000,  "max":120000, "rate":0.325 },
+          { "min":120000, "max":180000, "rate":0.37 },
+          { "min":180000, "max":null,   "rate":0.45 }
+        ]
+      },
+      "medicare": {
+        "threshold":24276,
+        "phaseInEnd":30514,
+        "rate":0.02,
+        "phaseInRate":0.10
+      }
+    }
+  }
+  
