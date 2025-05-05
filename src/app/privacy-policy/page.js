@@ -1,9 +1,18 @@
-"use client";
 import React from "react";
+import { getMeta } from "@/lib/seo";
 
+export const metadata = getMeta({
+  title: "Privacy Policy – AustraTax",
+  description:
+    "Read the privacy policy of AustraTax to understand how we handle your data, cookies, and personal information during your tax estimation process.",
+  keywords:
+    "privacy policy, data security, personal information, Australian tax tool, AustraTax",
+  url: "https://austratax.com.au/privacy-policy",
+  image: "/taximage.png",
+});
 export default function PrivacyPolicy() {
   return (
-    <main className="bg-white py-10 px-6 md:px-10 max-w-4xl mx-auto text-gray-800">
+    <main className="bg-white py-10 px-6 md:px-10 max-w-5xl mx-auto text-gray-800">
       <h1 className="text-4xl font-bold mb-8 text-[#ed8936] text-center">
         Privacy Policy
       </h1>

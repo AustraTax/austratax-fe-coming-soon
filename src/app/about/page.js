@@ -1,13 +1,23 @@
-"use client";
 import React from "react";
 import { Users, Globe, ShieldCheck, CheckCircle } from "lucide-react";
+import { getMeta } from "@/lib/seo";
+
+export const metadata = getMeta({
+  title: "About Us – AustraTax",
+  description:
+    "Learn why we created AustraTax: a smarter, simpler way to estimate your Australian tax return. Built for students, backpackers, freelancers, and visa holders.",
+  keywords:
+    "About AustraTax, who we help, tax for students, tax for backpackers, tax refund tool Australia",
+  url: "https://austratax.com.au/about",
+  image: "/taximage.png",
+});
 
 export default function AboutUs() {
   return (
     <main className="bg-white text-gray-800">
       {/* Hero Section */}
       <section className="bg-orange-50 py-20 px-6">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div>
             <h1 className="text-4xl sm:text-5xl font-bold text-[#ed8936] mb-4 leading-tight">
               About AustraTax
@@ -19,7 +29,7 @@ export default function AboutUs() {
           </div>
           <div>
             <img
-              src="/mainimage.png"
+              src="/taximage.png"
               alt="Tax illustration"
               className="w-full h-auto rounded-lg shadow-md"
             />
@@ -29,7 +39,7 @@ export default function AboutUs() {
 
       {/* Why We Created */}
       <section className="py-16 px-6 bg-white text-center">
-        <div className="max-w-3xl mx-auto space-y-6">
+        <div className="max-w-5xl mx-auto space-y-6">
           <h2 className="text-3xl font-semibold text-gray-900">
             Why We Created AustraTax
           </h2>
@@ -47,7 +57,7 @@ export default function AboutUs() {
 
       {/* Features */}
       <section className="py-16 px-6 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <h2 className="text-3xl font-semibold text-center text-gray-900 mb-10">
             What Makes Us Different
           </h2>
@@ -84,7 +94,7 @@ export default function AboutUs() {
 
       {/* Who We Help */}
       <section className="py-16 px-6 bg-white text-center">
-        <div className="max-w-4xl mx-auto space-y-6">
+        <div className="max-w-5xl mx-auto space-y-6">
           <h2 className="text-3xl font-semibold text-gray-900">Who We Help</h2>
           <p className="text-gray-700 text-lg">
             Our tools are built for people with real-life work setups and visa
@@ -109,7 +119,7 @@ export default function AboutUs() {
 
       {/* Mission Quote */}
       <section className="bg-orange-50 py-16 px-4 text-center">
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <blockquote className="italic text-gray-700 text-lg leading-relaxed">
             “Our mission is to make Australian tax filing feel human, helpful,
             and hassle-free.”
@@ -119,7 +129,7 @@ export default function AboutUs() {
 
       {/* CTA */}
       <section className="py-20 px-6 bg-white text-center">
-        <div className="max-w-xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-4">
             Ready to File Smarter?
           </h2>
