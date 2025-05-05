@@ -1,9 +1,18 @@
-"use client";
+import { getMeta } from "@/lib/seo";
 import React from "react";
+export const metadata = getMeta({
+  title: "Terms and Conditions – AustraTax",
+  description:
+    "Read the full Terms and Conditions of using the AustraTax website. Learn about eligibility, data usage, disclaimers, and your legal rights.",
+  keywords:
+    "terms of use, australian tax tool, legal, austrax, user agreement, disclaimers",
+  url: "https://austratax.com.au/terms",
+  image: "/taximage.png",
+});
 
 export default function Terms() {
   return (
-    <main className="bg-white py-10 px-6 md:px-10 max-w-4xl mx-auto text-gray-800">
+    <main className="bg-white py-10 px-6 md:px-10 max-w-5xl mx-auto text-gray-800">
       <h1 className="text-4xl font-bold mb-8 text-[#ed8936] text-center">
         Terms and Conditions of Use
       </h1>

@@ -1,4 +1,15 @@
 import { Mail } from "lucide-react";
+import { getMeta } from "@/lib/seo";
+
+export const metadata = getMeta({
+  title: "Contact Us – AustraTax",
+  description:
+    "Have questions about your tax return or using AustraTax? Get in touch with our team via email. We're happy to help students, visa holders, and Aussie workers alike.",
+  keywords:
+    "contact Austratax, tax help Australia, support, email tax calculator",
+  url: "https://austratax.com.au/contact",
+  image: "/logo2.png", // or use /taximage.png if preferred
+});
 
 export default function ContactPage() {
   return (
